@@ -34,9 +34,9 @@ const triggerConfetti = () => {
   frame();
 };
 import Link from 'next/link';
-import { fetchTeams, fetchPlayers, seedDatabase } from '@/services/api';
+import { fetchTeams, fetchPlayers } from '@/services/api';
 import { Team, Player } from '@/types';
-import { Trophy, ShieldAlert, Sparkles, User } from 'lucide-react';
+import { Trophy, ShieldAlert, User } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuctionStore } from '@/store/auctionStore';
 
@@ -141,10 +141,10 @@ function CompactTeamCard({ team }: { team: Team }) {
               <img
                 src={team.managerImage}
                 alt={managerName}
-                className="w-7 h-7 rounded-full border border-zinc-800 object-cover bg-zinc-900 shrink-0"
+                className="w-9 h-9 rounded-full border border-zinc-800 object-cover bg-zinc-900 shrink-0"
               />
             ) : (
-              <div className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-400 flex items-center justify-center font-bold text-[9px] uppercase shrink-0">
+              <div className="w-9 h-9 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-400 flex items-center justify-center font-bold text-[10px] uppercase shrink-0">
                 {managerInitials}
               </div>
             )}
@@ -359,7 +359,7 @@ function FifaPlayerCard({ player }: { player: Player }) {
     : playerName;
 
   return (
-    <div className="flex flex-col items-center animate-fade-in-up">
+    <div className="flex flex-col items-center animate-fade-in-up transform scale-[0.85] sm:scale-100 origin-top mb-[-60px] sm:mb-0">
       {/* Match Attax Card Container (Scaled up slightly to 352x495) */}
       <div className="relative w-[352px] h-[495px] rounded-xl overflow-hidden bg-gradient-to-br from-[#2a2c2e] via-[#4d5053] to-[#1c1e20] p-[5px] shadow-2xl transition-all duration-500 ease-out hover:scale-[1.05] group select-none">
 
@@ -622,17 +622,6 @@ export default function Home() {
     }
   }, [teams]);
 
-  const seedMutation = useMutation({
-    mutationFn: seedDatabase,
-    onSuccess: (data) => {
-      showToast(data.message || 'Database seeded successfully!', 'success');
-      queryClient.invalidateQueries();
-    },
-    onError: (error: Error) => {
-      showToast(error.message || 'Failed to seed database.', 'error');
-    },
-  });
-
   const totalTeams = teams?.length || 0;
 
   if (error) {
@@ -654,16 +643,8 @@ export default function Home() {
         <Trophy className="w-12 h-12 text-amber-500/35 mb-3" />
         <h3 className="text-lg font-bold text-slate-200">No Teams Available</h3>
         <p className="text-xs text-slate-400 mt-1 max-w-md">
-          The database is currently empty. Click the button below to seed the database with Malayalam-themed teams and players to test the auction features immediately.
+          The database is currently empty. Add teams from the Admin Dashboard to start the auction.
         </p>
-        <button
-          onClick={() => seedMutation.mutate()}
-          disabled={seedMutation.isPending}
-          className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 px-5 py-2.5 text-xs font-bold text-slate-950 shadow transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-slate-900" />
-          <span>{seedMutation.isPending ? 'Seeding Database...' : 'Seed Database'}</span>
-        </button>
       </div>
     );
   }
@@ -842,7 +823,7 @@ export default function Home() {
           {selectedPlayer ? (
             <FifaPlayerCard player={selectedPlayer} />
           ) : (
-            <div className="relative w-[352px] h-[495px] border-2 border-dashed border-white/10 bg-zinc-950/20 rounded-xl flex flex-col items-center justify-center text-center p-6 select-none shadow-inner">
+            <div className="relative w-[352px] h-[495px] border-2 border-dashed border-white/10 bg-zinc-950/20 rounded-xl flex flex-col items-center justify-center text-center p-6 select-none shadow-inner transform scale-[0.85] sm:scale-100 origin-top mb-[-60px] sm:mb-0">
               <User className="w-12 h-12 text-slate-500/40 mb-3" />
               <span className="text-xs font-bold text-slate-400 block uppercase tracking-wider">No Player Selected</span>
             </div>

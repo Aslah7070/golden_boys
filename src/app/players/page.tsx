@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchPlayers } from '@/services/api';
 import { useAuctionStore } from '@/store/auctionStore';
 import PlayerCard from '@/components/PlayerCard';
-import { Search, SlidersHorizontal, RefreshCw, UserX } from 'lucide-react';
+import { Search, SlidersHorizontal, RefreshCw, UserX, ChevronDown, Shield, Tag, Filter } from 'lucide-react';
 
 export default function PlayersPage() {
   // Read state and filters from Zustand
@@ -71,23 +71,24 @@ export default function PlayersPage() {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {/* Search Box */}
-          <div className="relative lg:col-span-2">
-            <Search className="absolute left-3 top-3.5 w-4 h-4 text-slate-500" />
+          <div className="relative lg:col-span-2 group">
+            <Search className="absolute left-3 top-3.5 w-4 h-4 text-slate-500 group-focus-within:text-amber-500 transition-colors pointer-events-none" />
             <input
               type="text"
               placeholder="Search player name..."
               value={filters.search}
               onChange={handleSearchChange}
-              className="w-full h-11 bg-slate-950 border border-white/10 rounded-xl pl-9 pr-3 text-slate-200 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all placeholder:text-slate-500"
+              className="w-full h-11 bg-slate-900/80 border border-white/5 hover:border-white/10 rounded-xl pl-10 pr-3 text-slate-200 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition-all placeholder:text-slate-500 shadow-inner"
             />
           </div>
 
           {/* Position Selector */}
-          <div>
+          <div className="relative group">
+            <Shield className="absolute left-3 top-3.5 w-4 h-4 text-slate-500 group-focus-within:text-amber-500 transition-colors pointer-events-none" />
             <select
               value={filters.position}
               onChange={handlePositionChange}
-              className="w-full h-11 bg-slate-950 border border-white/10 rounded-xl px-3 text-slate-300 text-sm focus:outline-none focus:border-amber-500 transition-all font-medium"
+              className="w-full h-11 bg-slate-900/80 border border-white/5 hover:border-white/10 rounded-xl pl-10 pr-10 text-slate-300 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition-all font-medium appearance-none cursor-pointer shadow-inner"
             >
               <option value="">All Positions</option>
               <option value="GOALKEEPER">Goalkeeper</option>
@@ -97,14 +98,16 @@ export default function PlayersPage() {
               <option value="RIGHT_WING">Right Wing</option>
               <option value="STRIKER">Striker</option>
             </select>
+            <ChevronDown className="absolute right-3 top-3.5 w-4 h-4 text-slate-500 pointer-events-none" />
           </div>
 
           {/* Category Selector */}
-          <div>
+          <div className="relative group">
+            <Tag className="absolute left-3 top-3.5 w-4 h-4 text-slate-500 group-focus-within:text-amber-500 transition-colors pointer-events-none" />
             <select
               value={filters.category}
               onChange={handleCategoryChange}
-              className="w-full h-11 bg-slate-950 border border-white/10 rounded-xl px-3 text-slate-300 text-sm focus:outline-none focus:border-amber-500 transition-all font-medium"
+              className="w-full h-11 bg-slate-900/80 border border-white/5 hover:border-white/10 rounded-xl pl-10 pr-10 text-slate-300 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition-all font-medium appearance-none cursor-pointer shadow-inner"
             >
               <option value="">All Categories</option>
               <option value="GK">GK (Goalkeeper)</option>
@@ -113,19 +116,22 @@ export default function PlayersPage() {
               <option value="LEGEND">LEGEND</option>
               <option value="GENERAL">GENERAL</option>
             </select>
+            <ChevronDown className="absolute right-3 top-3.5 w-4 h-4 text-slate-500 pointer-events-none" />
           </div>
 
           {/* Sold / Unsold Status Selector */}
-          <div>
+          <div className="relative group">
+            <Filter className="absolute left-3 top-3.5 w-4 h-4 text-slate-500 group-focus-within:text-amber-500 transition-colors pointer-events-none" />
             <select
               value={filters.status}
               onChange={handleStatusChange}
-              className="w-full h-11 bg-slate-950 border border-white/10 rounded-xl px-3 text-slate-300 text-sm focus:outline-none focus:border-amber-500 transition-all font-medium"
+              className="w-full h-11 bg-slate-900/80 border border-white/5 hover:border-white/10 rounded-xl pl-10 pr-10 text-slate-300 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition-all font-medium appearance-none cursor-pointer shadow-inner"
             >
               <option value="all">All Statuses</option>
               <option value="unsold">Unsold Only</option>
               <option value="sold">Sold Only</option>
             </select>
+            <ChevronDown className="absolute right-3 top-3.5 w-4 h-4 text-slate-500 pointer-events-none" />
           </div>
         </div>
 
