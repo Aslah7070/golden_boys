@@ -424,9 +424,9 @@ function FifaPlayerCard({ player }: { player: Player }) {
     : playerName;
 
   return (
-    <div className="flex flex-col items-center animate-fade-in-up transform scale-[0.85] sm:scale-100 origin-top mb-[-60px] sm:mb-0">
-      {/* Match Attax Card Container (Scaled up slightly to 352x495) */}
-      <div className="relative w-[352px] h-[495px] rounded-xl overflow-hidden bg-gradient-to-br from-[#2a2c2e] via-[#4d5053] to-[#1c1e20] p-[5px] shadow-2xl transition-all duration-500 ease-out hover:scale-[1.05] group select-none">
+    <div className="flex flex-col items-center animate-fade-in-up transform scale-[0.85] sm:scale-100 origin-top mb-[-60px] sm:mb-0 z-30">
+      {/* Match Attax Card Container (Scaled up on hover) */}
+      <div className="relative w-[352px] h-[495px] rounded-xl overflow-hidden bg-gradient-to-br from-[#2a2c2e] via-[#4d5053] to-[#1c1e20] p-[5px] shadow-2xl transition-all duration-500 ease-out hover:scale-[1.15] hover:shadow-[0_20px_60px_-15px_rgba(251,191,36,0.2)] group select-none cursor-pointer">
 
         {/* Shiny foil overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out z-20 pointer-events-none" />
