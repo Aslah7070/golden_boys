@@ -1,0 +1,272 @@
+import { NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/db';
+import Team from '@/models/team';
+import Player from '@/models/player';
+
+const MOCK_TEAMS = [
+  {
+    teamName: 'Malappuram United',
+    logo: '/teams/malappuram.png',
+    balance: 150000,
+    totalSpent: 0,
+    buyedPlayers: [],
+  },
+  {
+    teamName: 'Kozhikode Warriors',
+    logo: '/teams/kozhikode.png',
+    balance: 150000,
+    totalSpent: 0,
+    buyedPlayers: [],
+  },
+  {
+    teamName: 'Ernakulam Strikers',
+    logo: '/teams/ernakulam.png',
+    balance: 150000,
+    totalSpent: 0,
+    buyedPlayers: [],
+  },
+  {
+    teamName: 'Thrissur Lions',
+    logo: '/teams/thrissur.png',
+    balance: 150000,
+    totalSpent: 0,
+    buyedPlayers: [],
+  },
+  {
+    teamName: 'Kannur Royals',
+    logo: '/teams/kannur.png',
+    balance: 150000,
+    totalSpent: 0,
+    buyedPlayers: [],
+  },
+  {
+    teamName: 'Kottayam Blasters',
+    logo: '/teams/kottayam.png',
+    balance: 150000,
+    totalSpent: 0,
+    buyedPlayers: [],
+  },
+];
+
+const MOCK_PLAYERS = [
+  {
+    playerName: 'Asif K. P.',
+    position: 'STRIKER',
+    category: 'ICON',
+    phoneNumber: '9876543210',
+    age: 24,
+    place: 'Kottayam',
+    photo: '/players/asif.png',
+    basePrice: 50000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Vineeth C. K.',
+    position: 'MIDFIELDER',
+    category: 'LEGEND',
+    phoneNumber: '9876543211',
+    age: 31,
+    place: 'Kozhikode',
+    photo: '/players/vineeth.png',
+    basePrice: 80000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Jithesh P. M.',
+    position: 'DEFENDER',
+    category: 'YOUNG',
+    phoneNumber: '9876543212',
+    age: 19,
+    place: 'Malappuram',
+    photo: '/players/jithesh.png',
+    basePrice: 20000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Sharafudeen T.',
+    position: 'GOALKEEPER',
+    category: 'GK',
+    phoneNumber: '9876543213',
+    age: 26,
+    place: 'Thrissur',
+    photo: '/players/sharaf.png',
+    basePrice: 30000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Fasil Rahman',
+    position: 'LEFT_WING',
+    category: 'ICON',
+    phoneNumber: '9876543214',
+    age: 23,
+    place: 'Ernakulam',
+    photo: '/players/fasil.png',
+    basePrice: 60000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Rahul K. P.',
+    position: 'RIGHT_WING',
+    category: 'YOUNG',
+    phoneNumber: '9876543215',
+    age: 20,
+    place: 'Palakkad',
+    photo: '/players/rahul.png',
+    basePrice: 35000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Anas Edathodika',
+    position: 'DEFENDER',
+    category: 'LEGEND',
+    phoneNumber: '9876543216',
+    age: 33,
+    place: 'Malappuram',
+    photo: '/players/anas.png',
+    basePrice: 75000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Rinshad N. P.',
+    position: 'MIDFIELDER',
+    category: 'ICON',
+    phoneNumber: '9876543217',
+    age: 25,
+    place: 'Kozhikode',
+    photo: '/players/rinshad.png',
+    basePrice: 65000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Sreejith Murali',
+    position: 'GOALKEEPER',
+    category: 'GK',
+    phoneNumber: '9876543218',
+    age: 28,
+    place: 'Kannur',
+    photo: '/players/sreejith.png',
+    basePrice: 30000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Ashique Kuruniyan',
+    position: 'LEFT_WING',
+    category: 'YOUNG',
+    phoneNumber: '9876543219',
+    age: 22,
+    place: 'Malappuram',
+    photo: '/players/ashique.png',
+    basePrice: 45000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Sahal Abdul Samad',
+    position: 'MIDFIELDER',
+    category: 'ICON',
+    phoneNumber: '9876543220',
+    age: 26,
+    place: 'Kasaragod',
+    photo: '/players/sahal.png',
+    basePrice: 100000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Sujith M. S.',
+    position: 'DEFENDER',
+    category: 'YOUNG',
+    phoneNumber: '9876543221',
+    age: 21,
+    place: 'Wayanad',
+    photo: '/players/sujith.png',
+    basePrice: 25000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Prasanth Karuthadathkuni',
+    position: 'RIGHT_WING',
+    category: 'LEGEND',
+    phoneNumber: '9876543222',
+    age: 29,
+    place: 'Thrissur',
+    photo: '/players/prasanth.png',
+    basePrice: 55000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Gokul Gopal',
+    position: 'DEFENDER',
+    category: 'YOUNG',
+    phoneNumber: '9876543223',
+    age: 18,
+    place: 'Alappuzha',
+    photo: '/players/gokul.png',
+    basePrice: 20000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+  {
+    playerName: 'Roshan V. Giri',
+    position: 'STRIKER',
+    category: 'YOUNG',
+    phoneNumber: '9876543224',
+    age: 20,
+    place: 'Kollam',
+    photo: '/players/roshan.png',
+    basePrice: 40000,
+    soldPrice: 0,
+    soldTo: null,
+    isSold: false,
+  },
+];
+
+export async function POST() {
+  try {
+    await connectToDatabase();
+
+    // Clear existing data
+    await Team.deleteMany({});
+    await Player.deleteMany({});
+
+    // Seed Teams
+    const seededTeams = await Team.insertMany(MOCK_TEAMS);
+
+    // Seed Players
+    const seededPlayers = await Player.insertMany(MOCK_PLAYERS);
+
+    return NextResponse.json({
+      message: 'Database seeded successfully',
+      teamsCount: seededTeams.length,
+      playersCount: seededPlayers.length,
+    });
+  } catch (error: unknown) {
+    const err = error as Error;
+    return NextResponse.json({ error: err.message || 'Failed to seed database' }, { status: 500 });
+  }
+}
