@@ -20,6 +20,7 @@ export default function TeamDetails({ params }: TeamDetailsProps) {
     queryKey: ['team', id],
     queryFn: () => fetchTeamDetails(id),
     enabled: !!id,
+    refetchInterval: 1000,
   });
 
   if (isLoading) {
@@ -52,8 +53,8 @@ export default function TeamDetails({ params }: TeamDetailsProps) {
 
   const boughtPlayers = (team.buyedPlayers as Player[]) || [];
   const totalSpent = team.totalSpent || 0;
-  const balance = team.balance || 0;
-  const totalBudget = balance + totalSpent;
+  const balance = 2000 - totalSpent;
+  const totalBudget = 2000;
   const spentPercentage = totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
 
   // Initials logo fallback

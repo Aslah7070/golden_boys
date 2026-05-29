@@ -17,6 +17,7 @@ export default function Navbar() {
   const { data: players } = useQuery({
     queryKey: ['allPlayers'],
     queryFn: () => fetchPlayers({ search: '', position: '', category: '', status: 'all' }),
+    refetchInterval: 1000,
   });
 
   // Database Seed Mutation

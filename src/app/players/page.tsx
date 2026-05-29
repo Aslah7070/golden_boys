@@ -14,6 +14,7 @@ export default function PlayersPage() {
   const { data: players, isLoading, error } = useQuery({
     queryKey: ['players', filters],
     queryFn: () => fetchPlayers(filters),
+    refetchInterval: 1000,
   });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,6 +111,7 @@ export default function PlayersPage() {
               <option value="ICON">ICON</option>
               <option value="YOUNG">YOUNG</option>
               <option value="LEGEND">LEGEND</option>
+              <option value="GENERAL">GENERAL</option>
             </select>
           </div>
 

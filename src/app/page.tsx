@@ -1,12 +1,43 @@
 'use client';
 
+import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import confetti from 'canvas-confetti';
+
+const triggerConfetti = () => {
+  const end = Date.now() + 3 * 1000; // 3 seconds
+  const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+
+  const frame = () => {
+    if (Date.now() > end) return;
+
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      startVelocity: 60,
+      origin: { x: 0, y: 0.5 },
+      colors: colors,
+    });
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      startVelocity: 60,
+      origin: { x: 1, y: 0.5 },
+      colors: colors,
+    });
+
+    requestAnimationFrame(frame);
+  };
+
+  frame();
+};
 import Link from 'next/link';
-import { fetchTeams } from '@/services/api';
+import { fetchTeams, fetchPlayers, seedDatabase } from '@/services/api';
 import { Team, Player } from '@/types';
 import { Trophy, ShieldAlert, Sparkles, User } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { seedDatabase } from '@/services/api';
 import { useAuctionStore } from '@/store/auctionStore';
 
 
@@ -39,13 +70,20 @@ function CompactTeamCard({ team }: { team: Team }) {
   const remainingSlots = team.remainingSlots !== undefined ? team.remainingSlots : Math.max(0, 10 - playerCount);
   const managerImage = team.managerImage && team.managerImage !== '/managers/default.png' ? team.managerImage : '/managers/default.png';
   const managerName = team.managerName || 'TBD';
+  const managerInitials = managerName
+    .split(' ')
+    .map((word) => word[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
   const coverImage = team.coverImage && team.coverImage !== '/teams/covers/default.jpg' ? team.coverImage : 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=400&auto=format&fit=crop';
 
   return (
     <Link href={`/team/${team._id}`} className="group block w-[calc(50%-7px)] sm:w-[180px] lg:w-[240px] aspect-[3/4]">
       <div className="rounded-2xl p-4 flex flex-col justify-between items-start text-left transition-all duration-300 border border-zinc-800 bg-[#18191d] shadow-xl w-full h-full hover:border-zinc-700 hover:bg-[#1f2127]">
-        {/* Team Logo Container (No Banner Image, Enlarged Logo) */}
-        <div className="w-full flex justify-center mt-3 mb-2 shrink-0">
+        {/* Team Logo and Vertical Slots Container (Relative layout for perfect center alignment) */}
+        <div className="w-full flex justify-center items-center mt-3 mb-2 shrink-0 relative px-1">
+          {/* Perfectly Centered Team Logo */}
           <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center font-black text-white text-lg sm:text-xl tracking-widest bg-gradient-to-br ${getFallbackBg(team.teamName)} shadow-lg shadow-black/50 border-2 border-zinc-700 group-hover:scale-105 transition-transform duration-300`}>
             {team.logo && team.logo !== '/teams/default.png' && !team.logo.startsWith('/teams/default') ? (
               <img src={team.logo} alt={team.teamName} className="w-full h-full rounded-full object-cover" />
@@ -53,51 +91,120 @@ function CompactTeamCard({ team }: { team: Team }) {
               initials
             )}
           </div>
+          
+          {/* Vertical Slots in a 2x5 Grid - Absolutely Positioned on the Right Side of Logo */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-center select-none bg-zinc-950/45 border border-zinc-800/40 rounded-xl p-1.5 sm:p-2 backdrop-blur-sm z-20 shadow-md">
+            <span className="text-[6.5px] text-zinc-500 uppercase font-black tracking-wider leading-none mb-1.5">Slots</span>
+            
+            {/* 2 columns side-by-side, each with 5 checkboxes */}
+            <div className="flex gap-1.5">
+              {/* Left Column (Slots 1-5) */}
+              <div className="flex flex-col gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <input
+                    key={i}
+                    type="checkbox"
+                    checked={i < playerCount}
+                    readOnly
+                    className="w-2.2 h-2.2 sm:w-2.8 sm:h-2.8 rounded-[2px] border-zinc-800 bg-zinc-950 accent-purple-500 cursor-default shrink-0 focus:ring-0 focus:ring-offset-0 pointer-events-none"
+                  />
+                ))}
+              </div>
+              
+              {/* Right Column (Slots 6-10) */}
+              <div className="flex flex-col gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <input
+                    key={i + 5}
+                    type="checkbox"
+                    checked={(i + 5) < playerCount}
+                    readOnly
+                    className="w-2.2 h-2.2 sm:w-2.8 sm:h-2.8 rounded-[2px] border-zinc-800 bg-zinc-950 accent-purple-500 cursor-default shrink-0 focus:ring-0 focus:ring-offset-0 pointer-events-none"
+                  />
+                ))}
+              </div>
+            </div>
+            
+            <span className="text-[6.5px] text-zinc-400 font-bold uppercase tracking-wider leading-none mt-1.5">{playerCount}/10</span>
+          </div>
         </div>
 
         {/* Title & Manager Info */}
         <div className="w-full mt-3">
           <h3 className="text-xs sm:text-sm font-black text-white truncate w-full" title={team.teamName}>
-            @{team.teamName.replace(/\s+/g, '')}
+            {team.teamName}
           </h3>
           
           {/* Manager row */}
-          <div className="flex items-center gap-1.5 mt-1.5 w-full">
-            <img
-              src={managerImage}
-              alt={managerName}
-              className="w-5 h-5 rounded-full border border-zinc-800 object-cover bg-zinc-900 shrink-0"
-            />
+          <div className="flex items-center gap-2 mt-2 w-full">
+            {team.managerImage && team.managerImage !== '/managers/default.png' && !team.managerImage.startsWith('/managers/default') ? (
+              <img
+                src={team.managerImage}
+                alt={managerName}
+                className="w-7 h-7 rounded-full border border-zinc-800 object-cover bg-zinc-900 shrink-0"
+              />
+            ) : (
+              <div className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-400 flex items-center justify-center font-bold text-[9px] uppercase shrink-0">
+                {managerInitials}
+              </div>
+            )}
             <div className="flex flex-col min-w-0">
-              <span className="text-[7.5px] text-zinc-500 uppercase font-black leading-none">Manager</span>
-              <span className="text-[9.5px] font-bold text-zinc-300 truncate mt-0.5 leading-none">{managerName}</span>
+              <span className="text-[8px] text-zinc-500 uppercase font-black leading-none">Manager</span>
+              <span className="text-[10px] font-bold text-zinc-300 truncate mt-1 leading-none">{managerName}</span>
             </div>
           </div>
         </div>
 
-        {/* Small Checkboxes representing signed player slots */}
-        <div className="mt-2.5 w-full">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-[7.5px] text-zinc-500 uppercase font-black tracking-wider">Signed Slots</span>
-            <span className="text-[7.5px] text-zinc-400 font-bold uppercase tracking-wider">{playerCount}/10</span>
-          </div>
-          <div className="flex flex-wrap gap-1 items-center">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <input
-                key={i}
-                type="checkbox"
-                checked={i < playerCount}
-                readOnly
-                className="w-3 h-3 rounded border-zinc-750 bg-zinc-950 accent-purple-500 cursor-default shrink-0 focus:ring-0 focus:ring-offset-0 pointer-events-none"
-              />
-            ))}
-          </div>
-        </div>
+          {/* Overlapping Avatar Stack of Signed Players (Rendered Separately Under Checkboxes) */}
+          {playerCount > 0 && (
+            <div className="flex flex-wrap items-center mt-3 -space-x-1.5 pl-0.5">
+              {team.buyedPlayers.map((player: Player, index) => {
+                const photo = player.photo || player.playerImage;
+                const pName = player.playerName || player.name || 'Player';
+                return (
+                  <div key={player._id || index} className="relative group/avatar shrink-0 z-10 hover:z-30 transition-all">
+                    {/* Circle Avatar */}
+                    <div className="w-5.5 h-5.5 rounded-full border border-zinc-800 bg-zinc-900 overflow-hidden flex items-center justify-center shadow-md hover:scale-110 hover:border-purple-500 transition-all duration-200 cursor-pointer">
+                      {photo && photo !== '/players/default.png' && !photo.startsWith('/players/default') ? (
+                        <img src={photo} alt={pName} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="text-[7px] font-black text-purple-400">
+                          {pName.slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
 
-        {/* Roster description & slots */}
-        <p className="text-[9.5px] text-zinc-400 mt-2 line-clamp-1 leading-normal w-full">
-          {remainingSlots} slots remaining • {playerCount} signed
-        </p>
+                    {/* Tooltip on Hover */}
+                    <div className="absolute bottom-7 left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/avatar:opacity-100 translate-y-2 group-hover/avatar:translate-y-0 transition-all duration-300 z-50 flex flex-col items-center">
+                      <div className="bg-zinc-950/95 border border-zinc-800 text-white rounded-lg p-2 shadow-2xl flex items-center gap-2.5 whitespace-nowrap backdrop-blur-md">
+                        {/* Player Thumbnail */}
+                        <div className="w-8 h-8 rounded-full border border-white/10 overflow-hidden shrink-0 bg-zinc-900 flex items-center justify-center">
+                          {photo && photo !== '/players/default.png' && !photo.startsWith('/players/default') ? (
+                            <img src={photo} alt={pName} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="text-[10px] font-black text-purple-400">
+                              {pName.slice(0, 2).toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+                        {/* Player Details */}
+                        <div className="flex flex-col text-left">
+                          <span className="text-[10px] font-black text-white leading-none">
+                            {pName}
+                          </span>
+                          <span className="text-[8px] text-zinc-500 font-bold uppercase mt-1 leading-none">
+                            {player.position.replace('_', ' ')} • ₹{(player.soldPrice || player.currentBid || 0).toLocaleString('en-IN')}
+                          </span>
+                        </div>
+                      </div>
+                      {/* Triangle Pointer */}
+                      <div className="w-2 h-2 bg-zinc-950 border-r border-b border-zinc-800 rotate-45 -mt-1 shadow-md" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
         {/* Footer with Balance and Spent */}
         <div className="w-full pt-3 border-t border-zinc-800/60 mt-auto grid grid-cols-2 gap-3 text-left">
@@ -108,10 +215,10 @@ function CompactTeamCard({ team }: { team: Team }) {
             </span>
           </div>
 
-          <div className="flex flex-col text-right sm:text-left">
-            <span className="text-[9px] text-zinc-500 uppercase font-black tracking-wider leading-none sm:text-left">Balance</span>
+          <div className="flex flex-col text-right">
+            <span className="text-[9px] text-zinc-500 uppercase font-black tracking-wider leading-none">Balance</span>
             <span className="text-[13px] sm:text-[15px] font-black text-emerald-400 font-mono mt-1 leading-none">
-              ₹{team.balance.toLocaleString('en-IN')}
+              ₹{(2000 - team.totalSpent).toLocaleString('en-IN')}
             </span>
           </div>
         </div>
@@ -134,7 +241,8 @@ const getFifaStats = (player: Player) => {
 
   const rating = player.category === 'LEGEND' ? getVal(10, 97, 101) :
     player.category === 'ICON' ? getVal(10, 93, 96) :
-      player.category === 'YOUNG' ? getVal(10, 84, 89) : getVal(10, 88, 92);
+      player.category === 'YOUNG' ? getVal(10, 84, 89) :
+        player.category === 'GENERAL' ? getVal(10, 78, 83) : getVal(10, 88, 92);
 
   const posMap: Record<string, string> = {
     'GOALKEEPER': 'GK',
@@ -447,13 +555,14 @@ function FifaPlayerCard({ player }: { player: Player }) {
 
             {/* Position & Price Tag */}
             <div className="flex-1 flex flex-col justify-between items-center bg-zinc-950/90 border border-white/10 rounded-[3px] py-1.5 px-1">
-              {/* Price Tag */}
+              {/* Price Tag — shows sold price if sold, else base price */}
               <span className="text-[#c59b72] font-black text-[10px] font-mono tracking-tight leading-none">
-                ₹{player?.basePrice !== undefined
-                  ? player.basePrice >= 100000
-                    ? `${(player.basePrice / 100000).toFixed(1)}L`
-                    : `${(player.basePrice / 1000).toFixed(0)}K`
-                  : '0K'}
+                {(() => {
+                  const price = (player?.isSold && player?.soldPrice) ? player.soldPrice : (player?.basePrice ?? 0);
+                  if (price >= 100000) return `₹${(price / 100000).toFixed(1)}L`;
+                  if (price >= 1000) return `₹${(price / 1000).toFixed(0)}K`;
+                  return `₹${price}`;
+                })()}
               </span>
               {/* Position */}
               <span className="text-orange-500 font-extrabold text-[10px] uppercase tracking-widest leading-none drop-shadow-md select-none">
@@ -482,12 +591,36 @@ function FifaPlayerCard({ player }: { player: Player }) {
 export default function Home() {
   const queryClient = useQueryClient();
   const showToast = useAuctionStore((state) => state.showToast);
-  const selectedPlayer = useAuctionStore((state) => state.selectedPlayer);
+  const selectedPlayerFromStore = useAuctionStore((state) => state.selectedPlayer);
 
+  // Poll teams list every 1 second to catch real-time admin updates
   const { data: teams, isLoading, error } = useQuery({
     queryKey: ['teams'],
     queryFn: fetchTeams,
+    refetchInterval: 1000,
   });
+
+  // Poll all players every 1 second to catch real-time admin bid selections and sold states
+  const { data: players } = useQuery({
+    queryKey: ['allPlayers'],
+    queryFn: () => fetchPlayers({ search: '', position: '', category: '', status: 'all' }),
+    refetchInterval: 1000,
+  });
+
+  const selectedPlayer = players?.find(p => p._id === selectedPlayerFromStore?._id) || selectedPlayerFromStore;
+
+  const prevSoldPlayersCount = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (teams) {
+      const currentSold = teams.reduce((acc, t) => acc + (t.buyedPlayers?.length || 0), 0);
+      if (prevSoldPlayersCount.current !== null && currentSold > prevSoldPlayersCount.current) {
+        triggerConfetti();
+        showToast("🔥 PLAYER ACQUIRED! New signing successfully added to roster!", "success");
+      }
+      prevSoldPlayersCount.current = currentSold;
+    }
+  }, [teams]);
 
   const seedMutation = useMutation({
     mutationFn: seedDatabase,
