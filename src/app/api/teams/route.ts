@@ -5,7 +5,7 @@ import Team from '@/models/team';
 export async function GET() {
   try {
     await connectToDatabase();
-    const teams = await Team.find({}).sort({ teamName: 1 });
+    const teams = await Team.find({}).sort({ teamName: 1 }).populate('buyedPlayers');
     return NextResponse.json(teams);
   } catch (error: unknown) {
     const err = error as Error;

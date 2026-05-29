@@ -47,7 +47,7 @@ export default function BuyPlayerModal() {
     mutationFn: buyPlayer,
     onSuccess: (data) => {
       showToast(
-        `SUCCESS: ${selectedPlayer?.playerName} has been sold to ${data.teamName} for ₹${data.player.soldPrice.toLocaleString('en-IN')}!`,
+        `SUCCESS: ${selectedPlayer?.playerName || selectedPlayer?.name || 'Player'} has been sold to ${data.teamName} for ₹${data.player.soldPrice.toLocaleString('en-IN')}!`,
         'success'
       );
       
@@ -138,10 +138,10 @@ export default function BuyPlayerModal() {
         {/* Selected Player Details Card */}
         <div className="mb-6 p-4 rounded-xl bg-slate-950/40 border border-white/5 flex gap-4">
           <div className="w-12 h-12 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-xl flex items-center justify-center font-extrabold shrink-0">
-            {selectedPlayer.playerName.charAt(0)}
+            {(selectedPlayer.playerName || selectedPlayer.name || 'Unknown Player').charAt(0)}
           </div>
           <div>
-            <h3 className="font-bold text-slate-200">{selectedPlayer.playerName}</h3>
+            <h3 className="font-bold text-slate-200">{selectedPlayer.playerName || selectedPlayer.name || 'Unknown Player'}</h3>
             <div className="flex items-center gap-2 mt-1">
               <span className="text-[10px] uppercase font-semibold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">
                 {selectedPlayer.position.replace('_', ' ')}

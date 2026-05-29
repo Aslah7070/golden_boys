@@ -94,7 +94,7 @@ export default function Navbar() {
               <option value="" className="text-slate-500">Select Player...</option>
               {players?.map((player) => (
                 <option key={player._id} value={player._id} className="bg-slate-950 text-slate-300">
-                  {player.playerName} ({player.category} - {player.isSold ? 'Sold' : 'Unsold'})
+                  {player.playerName || player.name || 'Unknown Player'} ({player.category} - {player.isSold || !!player.team ? 'Sold' : 'Unsold'})
                 </option>
               ))}
             </select>

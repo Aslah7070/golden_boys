@@ -35,11 +35,11 @@ export default function TeamCard({ team }: TeamCardProps) {
   };
 
   return (
-    <Link href={`/team/${team._id}`} className="group block">
+    <Link href={`/team/${team._id}`} className="group block ">
       <div className="glass-card glass-card-hover rounded-2xl p-6 h-full flex flex-col justify-between transition-all duration-300 relative overflow-hidden">
         {/* Glow top border */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
+
         <div>
           {/* Header with Team Logo/Fallback */}
           <div className="flex items-center gap-4">

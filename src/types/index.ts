@@ -11,15 +11,19 @@ export type PlayerCategory = 'GK' | 'ICON' | 'YOUNG' | 'LEGEND';
 export interface Player {
   _id: string;
   playerName: string;
+  name?: string; // Alternative from backend
   position: PlayerPosition;
   category: PlayerCategory;
   phoneNumber: string;
-  age: number;
-  place: string;
+  age?: number;
+  place?: string;
   photo: string;
+  playerImage?: string; // Alternative from backend
   basePrice: number;
   soldPrice: number;
+  currentBid?: number; // Alternative from backend
   soldTo: string | { _id: string; teamName: string; logo: string } | null;
+  team?: string | { _id: string; teamName: string; logo: string } | null; // Alternative from backend
   isSold: boolean;
   createdAt: string;
   updatedAt: string;
@@ -28,6 +32,11 @@ export interface Player {
 export interface Team {
   _id: string;
   teamName: string;
+  shortName?: string;
+  managerName?: string;
+  managerImage?: string;
+  coverImage?: string;
+  remainingSlots?: number;
   logo: string;
   balance: number;
   totalSpent: number;

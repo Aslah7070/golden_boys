@@ -2,6 +2,11 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface ITeam extends Document {
   teamName: string;
+  shortName?: string;
+  managerName?: string;
+  managerImage?: string;
+  coverImage?: string;
+  remainingSlots?: number;
   logo: string;
   balance: number;
   totalSpent: number;
@@ -16,6 +21,26 @@ const TeamSchema: Schema<ITeam> = new Schema(
       type: String,
       required: [true, 'Team name is required'],
       trim: true,
+    },
+    shortName: {
+      type: String,
+      trim: true,
+    },
+    managerName: {
+      type: String,
+      trim: true,
+    },
+    managerImage: {
+      type: String,
+      default: '/managers/default.png',
+    },
+    coverImage: {
+      type: String,
+      default: '/teams/covers/default.jpg',
+    },
+    remainingSlots: {
+      type: Number,
+      default: 10,
     },
     logo: {
       type: String,

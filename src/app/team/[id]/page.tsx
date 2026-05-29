@@ -24,7 +24,7 @@ export default function TeamDetails({ params }: TeamDetailsProps) {
 
   if (isLoading) {
     return (
-      <div className="space-y-8 animate-pulse">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-pulse">
         <div className="h-6 w-32 bg-slate-800 rounded" />
         <div className="h-44 bg-slate-800 rounded-3xl" />
         <div className="space-y-4">
@@ -81,7 +81,7 @@ export default function TeamDetails({ params }: TeamDetailsProps) {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Back Navigation */}
       <div>
         <Link
@@ -221,11 +221,11 @@ export default function TeamDetails({ params }: TeamDetailsProps) {
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 bg-slate-900 rounded-lg flex items-center justify-center text-xs font-bold text-slate-400 border border-white/5">
-                            {player.playerName.charAt(0)}
+                            {(player.playerName || player.name || 'Unknown Player').charAt(0)}
                           </div>
                           <div>
                             <span className="font-bold text-slate-200 group-hover:text-amber-400 transition-colors">
-                              {player.playerName}
+                              {player.playerName || player.name || 'Unknown Player'}
                             </span>
                             <span className="block text-[10px] text-slate-500 font-medium mt-0.5">
                               Phone: {player.phoneNumber}
