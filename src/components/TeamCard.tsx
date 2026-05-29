@@ -7,7 +7,8 @@ interface TeamCardProps {
 }
 
 export default function TeamCard({ team }: TeamCardProps) {
-  const playerCount = team.buyedPlayers.length;
+  // Manager counts as the first slot
+  const playerCount = (team.buyedPlayers?.length || 0) + 1;
 
   // Generate initials for fallback logo
   const initials = team.teamName

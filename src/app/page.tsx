@@ -78,7 +78,8 @@ const getFallbackBg = (name: string) => {
 };
 
 function CompactTeamCard({ team }: { team: Team }) {
-  const playerCount = team.buyedPlayers.length;
+  // Manager counts as the first slot
+  const playerCount = (team.buyedPlayers?.length || 0) + 1;
   const [prevPlayerCount, setPrevPlayerCount] = React.useState(playerCount);
   const [isBought, setIsBought] = React.useState(false);
 
@@ -174,17 +175,37 @@ function CompactTeamCard({ team }: { team: Team }) {
           
           {/* Manager row */}
           <div className="flex items-center gap-2 mt-2 w-full">
-            {team.managerImage && team.managerImage !== '/managers/default.png' && !team.managerImage.startsWith('/managers/default') ? (
-              <img
-                src={team.managerImage}
-                alt={managerName}
-                className="w-9 h-9 rounded-full border border-zinc-800 object-cover bg-zinc-900 shrink-0"
-              />
-            ) : (
-              <div className="w-9 h-9 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-400 flex items-center justify-center font-bold text-[10px] uppercase shrink-0">
-                {managerInitials}
+            <div className="relative group/mgr z-20 hover:z-40">
+              {team.managerImage && team.managerImage !== '/managers/default.png' && !team.managerImage.startsWith('/managers/default') ? (
+                <img
+                  src={team.managerImage}
+                  alt={managerName}
+                  className="w-9 h-9 rounded-full border border-zinc-800 object-cover bg-zinc-900 shrink-0 cursor-pointer hover:border-amber-500 transition-colors"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-400 flex items-center justify-center font-bold text-[10px] uppercase shrink-0 cursor-pointer hover:border-amber-500 transition-colors">
+                  {managerInitials}
+                </div>
+              )}
+
+              {/* Hover Tooltip / Enlarged Manager Image */}
+              <div className="absolute bottom-11 left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/mgr:opacity-100 translate-y-2 group-hover/mgr:translate-y-0 transition-all duration-300 z-50 flex flex-col items-center">
+                <div className="bg-zinc-950/95 border border-zinc-800 rounded-xl p-2 shadow-2xl flex flex-col items-center backdrop-blur-md">
+                  {team.managerImage && team.managerImage !== '/managers/default.png' && !team.managerImage.startsWith('/managers/default') ? (
+                    <img src={team.managerImage} alt={managerName} className="w-24 h-24 rounded-lg object-cover" />
+                  ) : (
+                    <div className="w-24 h-24 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-400 flex items-center justify-center font-bold text-3xl uppercase">
+                      {managerInitials}
+                    </div>
+                  )}
+                  <span className="text-[10px] font-black text-amber-500 mt-2 tracking-wider uppercase">Manager</span>
+                  <span className="text-xs font-bold text-white leading-tight mt-0.5 whitespace-nowrap px-2 pb-1">{managerName}</span>
+                </div>
+                {/* Triangle Pointer */}
+                <div className="w-3 h-3 bg-zinc-950 border-r border-b border-zinc-800 rotate-45 -mt-1.5 shadow-md" />
               </div>
-            )}
+            </div>
+            
             <div className="flex flex-col min-w-0">
               <span className="text-[8px] text-zinc-500 uppercase font-black leading-none">Manager</span>
               <span className="text-[10px] font-bold text-zinc-300 truncate mt-1 leading-none">{managerName}</span>
@@ -244,24 +265,24 @@ function CompactTeamCard({ team }: { team: Team }) {
           )}
 
         {/* Footer with Balance and Spent */}
-        <div className="w-full pt-3 border-t border-zinc-800/60 mt-auto grid grid-cols-3 gap-2 text-left">
+        <div className="w-full pt-3 border-t border-zinc-800/60 mt-auto grid grid-cols-3 gap-1 sm:gap-1.5 text-left">
           <div className="flex flex-col">
-            <span className="text-[8px] sm:text-[9px] text-zinc-500 uppercase font-black tracking-wider leading-none">Spent</span>
-            <span className="text-[11px] sm:text-[13px] font-black text-rose-500 font-mono mt-1 leading-none">
+            <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-black tracking-wider leading-none">Spent</span>
+            <span className="text-[13px] sm:text-[15px] font-black text-rose-500 font-mono tracking-tight mt-1 leading-none">
               ₹{team.totalSpent.toLocaleString('en-IN')}
             </span>
           </div>
 
           <div className="flex flex-col text-center border-x border-zinc-800/60 px-1">
-            <span className="text-[8px] sm:text-[9px] text-zinc-500 uppercase font-black tracking-wider leading-none">Max Bid</span>
-            <span className="text-[11px] sm:text-[13px] font-black text-amber-500 font-mono mt-1 leading-none">
+            <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-black tracking-wider leading-none">Max Bid</span>
+            <span className="text-[13px] sm:text-[15px] font-black text-amber-500 font-mono tracking-tight mt-1 leading-none">
               ₹{Math.max(0, (2000 - team.totalSpent) - (Math.max(0, 10 - playerCount - 1) * 50)).toLocaleString('en-IN')}
             </span>
           </div>
 
           <div className="flex flex-col text-right">
-            <span className="text-[8px] sm:text-[9px] text-zinc-500 uppercase font-black tracking-wider leading-none">Balance</span>
-            <span className="text-[11px] sm:text-[13px] font-black text-emerald-400 font-mono mt-1 leading-none">
+            <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-black tracking-wider leading-none">Balance</span>
+            <span className="text-[13px] sm:text-[15px] font-black text-emerald-400 font-mono tracking-tight mt-1 leading-none">
               ₹{(2000 - team.totalSpent).toLocaleString('en-IN')}
             </span>
           </div>
