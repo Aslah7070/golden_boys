@@ -158,7 +158,7 @@ function CompactTeamCard({ team }: { team: Team }) {
           {/* Overlapping Avatar Stack of Signed Players (Rendered Separately Under Checkboxes) */}
           {playerCount > 0 && (
             <div className="flex flex-wrap items-center mt-3 -space-x-1.5 pl-0.5">
-              {team.buyedPlayers.map((player: Player, index) => {
+              {(team.buyedPlayers as Player[]).map((player: Player, index) => {
                 const photo = player.photo || player.playerImage;
                 const pName = player.playerName || player.name || 'Player';
                 return (
