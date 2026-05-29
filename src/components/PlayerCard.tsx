@@ -26,48 +26,44 @@ export default function PlayerCard({ player }: PlayerCardProps) {
   const renderPlayerPhoto = () => {
     if (photo && photo !== '/players/default.png' && !photo.startsWith('/players/default')) {
       return (
-        <img 
-          src={photo} 
-          alt={playerName} 
-          className="w-full h-full rounded-full object-cover border border-white/20" 
+        <img
+          src={photo}
+          alt={playerName}
+          className="w-full h-full rounded-full object-cover border border-white/20"
         />
       );
     }
     return (
-      <span className={`font-black text-3xl tracking-wider transition-colors duration-500 ${
-        isSold ? 'text-white/40' : 'text-white'
-      }`}>
+      <span className={`font-black text-3xl tracking-wider transition-colors duration-500 ${isSold ? 'text-white/40' : 'text-white'
+        }`}>
         {initials}
       </span>
     );
   };
 
   return (
-    <div className="relative p-[1.5px] group rounded-2xl transition-all duration-500 ease-out hover:scale-[1.03] hover:-translate-y-1.5 min-h-[350px] flex flex-col justify-between overflow-hidden animate-fade-in-up shadow-lg">
-      
+    <div className="relative p-[1.5px] group rounded-2xl transition-all duration-500 ease-out hover:scale-[1.03] hover:-translate-y-1.5 min-h-[350px] flex flex-col justify-between animate-fade-in-up shadow-lg z-10 hover:z-50">
+
       {/* Premium White & Black Glow effect (Layer 1) */}
-      <div 
-        className={`absolute inset-0 rounded-2xl bg-[radial-gradient(circle_farthest-side_at_0_100%,#ffffff,transparent),radial-gradient(circle_farthest-side_at_100%_0,#f8fafc,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#e2e8f0,transparent),radial-gradient(circle_farthest-side_at_0_0,#ffffff,#000000)] transition-all duration-700 pointer-events-none animate-border-gradient ${
-          isSold 
-            ? 'opacity-10 blur-md' 
+      <div
+        className={`absolute inset-0 rounded-2xl bg-[radial-gradient(circle_farthest-side_at_0_100%,#ffffff,transparent),radial-gradient(circle_farthest-side_at_100%_0,#f8fafc,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#e2e8f0,transparent),radial-gradient(circle_farthest-side_at_0_0,#ffffff,#000000)] transition-all duration-700 pointer-events-none animate-border-gradient ${isSold
+            ? 'opacity-10 blur-md'
             : 'opacity-20 blur-xl group-hover:opacity-50 group-hover:blur-2xl'
-        }`} 
+          }`}
       />
 
       {/* Premium White & Black Border outline (Layer 2) */}
-      <div 
-        className={`absolute inset-0 rounded-2xl bg-[radial-gradient(circle_farthest-side_at_0_100%,#ffffff,transparent),radial-gradient(circle_farthest-side_at_100%_0,#f8fafc,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#e2e8f0,transparent),radial-gradient(circle_farthest-side_at_0_0,#ffffff,#000000)] transition-all duration-700 pointer-events-none animate-border-gradient ${
-          isSold 
-            ? 'opacity-15' 
+      <div
+        className={`absolute inset-0 rounded-2xl bg-[radial-gradient(circle_farthest-side_at_0_100%,#ffffff,transparent),radial-gradient(circle_farthest-side_at_100%_0,#f8fafc,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#e2e8f0,transparent),radial-gradient(circle_farthest-side_at_0_0,#ffffff,#000000)] transition-all duration-700 pointer-events-none animate-border-gradient ${isSold
+            ? 'opacity-15'
             : 'opacity-25 group-hover:opacity-100'
-        }`} 
+          }`}
       />
 
       {/* Inner Card Container */}
-      <div className={`relative flex-1 bg-[#18191d] rounded-[15px] p-4 flex flex-col justify-between border border-zinc-800 group-hover:border-zinc-700 backdrop-blur-3xl overflow-hidden transition-all duration-500 h-full ${
-        isSold ? 'opacity-80' : 'group-hover:bg-[#1f2127]'
-      }`}>
-        
+      <div className={`relative flex-1 bg-[#18191d] rounded-[15px] p-4 flex flex-col justify-between border border-zinc-800 group-hover:border-zinc-700 backdrop-blur-3xl transition-all duration-500 h-full ${isSold ? 'opacity-80' : 'group-hover:bg-[#1f2127]'
+        }`}>
+
         {/* Ribbon Badge */}
         {isSold ? (
           <div className="absolute top-3.5 right-3.5 flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/5 border border-white/15 text-white/50 z-10">
@@ -95,13 +91,26 @@ export default function PlayerCard({ player }: PlayerCardProps) {
 
         {/* Centered layout */}
         <div className="flex flex-col items-center text-center mt-4">
-          
-          <div className={`w-40 h-40 rounded-full flex items-center justify-center border transition-all duration-500 mb-3 ${
-            isSold 
-              ? 'bg-zinc-950 border-white/10' 
+
+          <div className={`relative group/pic w-40 h-40 rounded-full flex items-center justify-center border transition-all duration-500 mb-3 z-20 ${isSold
+              ? 'bg-zinc-950 border-white/10'
               : 'bg-zinc-950 border-white/20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 to-transparent group-hover:border-white/50 shadow-lg shadow-white/5'
-          }`}>
+            }`}>
             {renderPlayerPhoto()}
+
+            {/* Hover Tooltip / Enlarged Player Image */}
+            <div className="absolute bottom-[105%] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover/pic:opacity-100 -translate-y-2 group-hover/pic:translate-y-0 transition-all duration-300 z-[100] flex flex-col items-center min-w-[max-content]">
+              <div className="bg-zinc-950/95 border border-zinc-800 rounded-full p-2 shadow-2xl flex flex-col items-center backdrop-blur-md z-20">
+                {photo && photo !== '/players/default.png' && !photo.startsWith('/players/default') ? (
+                  <img src={photo} alt={playerName} className="w-56 h-56 sm:w-72 sm:h-72 min-w-[224px] min-h-[224px] sm:min-w-[288px] sm:min-h-[288px] rounded-full object-cover aspect-square flex-shrink-0" />
+                ) : (
+                  <div className="w-56 h-56 sm:w-72 sm:h-72 min-w-[224px] min-h-[224px] sm:min-w-[288px] sm:min-h-[288px] rounded-full bg-zinc-800 border border-zinc-700 text-zinc-400 flex items-center justify-center font-black text-6xl uppercase tracking-widest aspect-square flex-shrink-0">
+                    {initials}
+                  </div>
+                )}
+              </div>
+              <div className="w-3 h-3 bg-zinc-950 border-r border-b border-zinc-800 rotate-45 -mt-1.5 shadow-md z-10" />
+            </div>
           </div>
 
           {/* Name */}
@@ -139,7 +148,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 ₹{player.basePrice.toLocaleString('en-IN')}
               </span>
             </div>
-            
+
             {isSold && (
               <div className="text-right">
                 <span className="text-[9px] uppercase font-black text-slate-400 tracking-widest block">Sold Amount</span>

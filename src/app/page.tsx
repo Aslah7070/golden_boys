@@ -113,7 +113,7 @@ function CompactTeamCard({ team }: { team: Team }) {
   const coverImage = team.coverImage && team.coverImage !== '/teams/covers/default.jpg' ? team.coverImage : 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=400&auto=format&fit=crop';
 
   return (
-    <Link href={`/team/${team._id}`} className={`group block w-[calc(50%-7px)] sm:w-[180px] lg:w-[240px] aspect-[3/4] transition-all ${isBought ? 'z-50 relative' : ''}`}>
+    <div className={`group block w-[calc(50%-7px)] sm:w-[180px] lg:w-[240px] aspect-[3/4] transition-all ${isBought ? 'z-50 relative' : ''}`}>
       <motion.div 
         animate={isBought ? { rotate: [0, -6, 6, -3, 0], scale: [1, 1.08, 1.08, 1.03, 1] } : { rotate: 0, scale: 1 }}
         transition={{ duration: 0.7, ease: "easeInOut" }}
@@ -288,7 +288,7 @@ function CompactTeamCard({ team }: { team: Team }) {
           </div>
         </div>
       </motion.div>
-    </Link>
+    </div>
   );
 }
 
@@ -857,36 +857,44 @@ export default function Home() {
 
       {/* Desktop Layout (lg and above): Precise Corner & Side Positioning */}
       <div className="hidden lg:block relative w-full h-[620px]">
-        {/* Center: Selected Player Showcase Card */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          {selectedPlayer ? (
-            <FifaPlayerCard player={selectedPlayer} />
-          ) : (
-            <div className="relative w-[352px] h-[495px] border-2 border-dashed border-white/10 bg-zinc-950/20 rounded-xl flex flex-col items-center justify-center text-center p-6 select-none shadow-inner">
-              <User className="w-12 h-12 text-slate-500/40 mb-3" />
-              <span className="text-xs font-bold text-slate-400 block uppercase tracking-wider">No Player Selected</span>
-              <span className="text-[10px] text-slate-500 mt-2 px-4">
-                Select a player from the dropdown in the navigation bar to display their card.
-              </span>
+        {selectedPlayer ? (
+          <>
+            {/* Center: Selected Player Showcase Card */}
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <FifaPlayerCard player={selectedPlayer} />
             </div>
-          )}
-        </div>
 
-        {/* Left Section (2 columns, 2 rows grid centered vertically, shifted up slightly) */}
-        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -mt-5 grid grid-cols-2 gap-3.5 z-20">
-          {topLeftTeam && <CompactTeamCard team={topLeftTeam} />}
-          {topCenterTeams[0] && <CompactTeamCard team={topCenterTeams[0]} />}
-          {topCenterTeams[1] && <CompactTeamCard team={topCenterTeams[1]} />}
-          {bottomLeftTeam && <CompactTeamCard team={bottomLeftTeam} />}
-        </div>
+            {/* Left Section (2 columns, 2 rows grid centered vertically, shifted up slightly) */}
+            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -mt-5 grid grid-cols-2 gap-3.5 z-20">
+              {topLeftTeam && <CompactTeamCard team={topLeftTeam} />}
+              {topCenterTeams[0] && <CompactTeamCard team={topCenterTeams[0]} />}
+              {topCenterTeams[1] && <CompactTeamCard team={topCenterTeams[1]} />}
+              {bottomLeftTeam && <CompactTeamCard team={bottomLeftTeam} />}
+            </div>
 
-        {/* Right Section (2 columns, 2 rows grid centered vertically, shifted up slightly) */}
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 -mt-5 grid grid-cols-2 gap-3.5 z-20">
-          {topRightTeam && <CompactTeamCard team={topRightTeam} />}
-          {bottomCenterTeams[0] && <CompactTeamCard team={bottomCenterTeams[0]} />}
-          {bottomCenterTeams[1] && <CompactTeamCard team={bottomCenterTeams[1]} />}
-          {bottomRightTeam && <CompactTeamCard team={bottomRightTeam} />}
-        </div>
+            {/* Right Section (2 columns, 2 rows grid centered vertically, shifted up slightly) */}
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 -mt-5 grid grid-cols-2 gap-3.5 z-20">
+              {topRightTeam && <CompactTeamCard team={topRightTeam} />}
+              {bottomCenterTeams[0] && <CompactTeamCard team={bottomCenterTeams[0]} />}
+              {bottomCenterTeams[1] && <CompactTeamCard team={bottomCenterTeams[1]} />}
+              {bottomRightTeam && <CompactTeamCard team={bottomRightTeam} />}
+            </div>
+          </>
+        ) : (
+          /* No Player Selected State: All Teams centered in a 4x2 grid */
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-20 animate-fade-in-up">
+            <h2 className="text-xl sm:text-2xl font-black text-amber-500 tracking-widest uppercase mb-8 opacity-80 select-none">
+              Tournament Teams
+            </h2>
+            <div className="grid grid-cols-4 gap-6 max-w-7xl mx-auto w-full px-4 justify-items-center">
+              {teams.map((team) => (
+                <div key={team._id} className="w-full max-w-[240px]">
+                  <CompactTeamCard team={team} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Mobile/Tablet Layout (below lg): Fluid Stacked Grid */}
