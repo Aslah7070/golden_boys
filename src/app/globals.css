@@ -114,3 +114,14 @@ body {
   animation: borderGradient 8s ease infinite;
 }
 
+@keyframes tilt {
+  0%, 100% { transform: rotate(0deg) scale(1); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7); }
+  25% { transform: rotate(-4deg) scale(1.08); box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 0.4); border-color: rgba(168, 85, 247, 0.6); }
+  50% { transform: rotate(4deg) scale(1.08); box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 0.4); border-color: rgba(168, 85, 247, 0.6); }
+  75% { transform: rotate(-2deg) scale(1.03); box-shadow: 0 15px 35px -10px rgba(168, 85, 247, 0.2); }
+}
+
+.animate-tilt {
+  animation: tilt 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
