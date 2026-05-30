@@ -542,107 +542,82 @@ function FifaPlayerCard({ player }: { player: Player }) {
           </div>
 
           {/* Bottom Stats Grid (Match Attax Slanted Block Style) */}
-          <div className="absolute top-[372px] left-[12px] right-[12px] h-[84px] bg-black/75 backdrop-blur-sm border-t border-b border-white/10 py-[9px] px-[11px] z-25 flex justify-between gap-2 rounded-sm">
-            {/* Left Column (Speed, Tackle, Power) */}
-            <div className="flex flex-col gap-1 w-[48%] justify-center">
-              {/* Stat 1 */}
-              <div className="flex items-stretch h-[19px] gap-0.5">
-                <div className="-skew-x-12 bg-[#c59b72] text-black font-mono font-black text-[12px] w-[31px] flex items-center justify-center rounded-sm">
-                  <span className="skew-x-12">{stats.speed}</span>
+          <div className="absolute top-[362px] left-[12px] right-[12px] h-[62px] bg-black/75 backdrop-blur-sm border-t border-b border-white/10 py-[7px] px-[11px] z-25 flex justify-between gap-2 rounded-sm">
+            {/* Left Column (Phone, Place) */}
+            <div className="flex flex-col gap-2 w-[48%] justify-center">
+              {/* Phone */}
+              <div className="flex items-stretch h-[22px] gap-0.5">
+                <div className="-skew-x-12 bg-[#c59b72] text-black font-sans font-black text-[9px] w-[42px] flex items-center justify-center rounded-sm">
+                  <span className="skew-x-12">PHONE</span>
                 </div>
-                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-black text-[9.5px] flex-1 flex items-center pl-1.5 rounded-sm uppercase tracking-wider">
-                  <span className="skew-x-12">{stats.labels.l1}</span>
-                </div>
-              </div>
-              {/* Stat 2 */}
-              <div className="flex items-stretch h-[19px] gap-0.5">
-                <div className="-skew-x-12 bg-[#c59b72] text-black font-mono font-black text-[12px] w-[31px] flex items-center justify-center rounded-sm">
-                  <span className="skew-x-12">{stats.tackle}</span>
-                </div>
-                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-black text-[9.5px] flex-1 flex items-center pl-1.5 rounded-sm uppercase tracking-wider">
-                  <span className="skew-x-12">{stats.labels.l2}</span>
+                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-bold text-[9px] flex-1 flex items-center pl-2 rounded-sm uppercase tracking-wider overflow-hidden">
+                  <span className="skew-x-12 truncate">{player.phoneNumber || '—'}</span>
                 </div>
               </div>
-              {/* Stat 3 */}
-              <div className="flex items-stretch h-[19px] gap-0.5">
-                <div className="-skew-x-12 bg-[#c59b72] text-black font-mono font-black text-[12px] w-[31px] flex items-center justify-center rounded-sm">
-                  <span className="skew-x-12">{stats.power}</span>
+              {/* Place */}
+              <div className="flex items-stretch h-[22px] gap-0.5">
+                <div className="-skew-x-12 bg-[#c59b72] text-black font-sans font-black text-[9px] w-[42px] flex items-center justify-center rounded-sm">
+                  <span className="skew-x-12">PLACE</span>
                 </div>
-                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-black text-[9.5px] flex-1 flex items-center pl-1.5 rounded-sm uppercase tracking-wider">
-                  <span className="skew-x-12">{stats.labels.l3}</span>
+                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-bold text-[9px] flex-1 flex items-center pl-2 rounded-sm uppercase tracking-wider overflow-hidden">
+                  <span className="skew-x-12 truncate">{player.place || '—'}</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Column (Shoot, Skill, Pass) */}
-            <div className="flex flex-col gap-1 w-[48%] justify-center">
-              {/* Stat 1 */}
-              <div className="flex items-stretch h-[19px] gap-0.5">
-                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-black text-[9.5px] flex-1 flex items-center pl-1.5 rounded-sm uppercase tracking-wider">
-                  <span className="skew-x-12">{stats.labels.r1}</span>
+            {/* Right Column (Position, Base Price) */}
+            <div className="flex flex-col gap-2 w-[48%] justify-center">
+              {/* Position */}
+              <div className="flex items-stretch h-[22px] gap-0.5">
+                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-bold text-[8.5px] flex-1 flex items-center justify-end pr-2 rounded-sm uppercase tracking-wider overflow-hidden">
+                  <span className="skew-x-12 truncate">{player.position?.replace('_', ' ') || '—'}</span>
                 </div>
-                <div className="-skew-x-12 bg-[#c59b72] text-black font-mono font-black text-[12px] w-[31px] flex items-center justify-center rounded-sm">
-                  <span className="skew-x-12">{stats.shoot}</span>
-                </div>
-              </div>
-              {/* Stat 2 */}
-              <div className="flex items-stretch h-[19px] gap-0.5">
-                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-black text-[9.5px] flex-1 flex items-center pl-1.5 rounded-sm uppercase tracking-wider">
-                  <span className="skew-x-12">{stats.labels.r2}</span>
-                </div>
-                <div className="-skew-x-12 bg-[#c59b72] text-black font-mono font-black text-[12px] w-[31px] flex items-center justify-center rounded-sm">
-                  <span className="skew-x-12">{stats.skill}</span>
+                <div className="-skew-x-12 bg-[#c59b72] text-black font-sans font-black text-[9px] w-[42px] flex items-center justify-center rounded-sm">
+                  <span className="skew-x-12">POS</span>
                 </div>
               </div>
-              {/* Stat 3 */}
-              <div className="flex items-stretch h-[19px] gap-0.5">
-                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-black text-[9.5px] flex-1 flex items-center pl-1.5 rounded-sm uppercase tracking-wider">
-                  <span className="skew-x-12">{stats.labels.r3}</span>
+              {/* Base Price */}
+              <div className="flex items-stretch h-[22px] gap-0.5">
+                <div className="-skew-x-12 bg-zinc-900 border border-white/10 text-white font-sans font-bold text-[9.5px] flex-1 flex items-center justify-end pr-2 rounded-sm uppercase tracking-wider overflow-hidden text-emerald-400">
+                  <span className="skew-x-12 truncate">₹{(player.basePrice || 0).toLocaleString('en-IN')}</span>
                 </div>
-                <div className="-skew-x-12 bg-[#c59b72] text-black font-mono font-black text-[12px] w-[31px] flex items-center justify-center rounded-sm">
-                  <span className="skew-x-12">{stats.pass}</span>
+                <div className="-skew-x-12 bg-[#c59b72] text-black font-sans font-black text-[9px] w-[42px] flex items-center justify-center rounded-sm">
+                  <span className="skew-x-12">PRICE</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Very Bottom Defence / Position / Attack Panel */}
+          {/* Very Bottom Info Panel */}
           <div className="absolute bottom-[12px] left-[12px] right-[12px] h-[46px] z-25 flex items-stretch gap-2">
-            {/* Defence Score */}
-            <div className="w-[28%] flex flex-col bg-gradient-to-b from-[#00aaff] to-[#0055b3] border border-white/20 rounded-[3px] text-center justify-center overflow-hidden shadow-inner">
-              <span className="text-white font-black text-[19px] font-mono leading-none drop-shadow-md">
-                {stats.defenceRating}
-              </span>
-              <span className="bg-blue-950 text-white text-[8px] font-black uppercase tracking-wider py-0.5 mt-0.5 leading-none">
-                DEFENCE
-              </span>
-            </div>
-
-            {/* Position & Price Tag */}
-            <div className="flex-1 flex flex-col justify-between items-center bg-zinc-950/90 border border-white/10 rounded-[3px] py-1.5 px-1">
-              {/* Price Tag — shows sold price if sold, else base price */}
-              <span className="text-[#c59b72] font-black text-[10px] font-mono tracking-tight leading-none">
+            {/* Price Panel */}
+            <div className="w-[28%] flex flex-col bg-zinc-900 border border-white/20 rounded-[3px] text-center justify-center overflow-hidden shadow-inner p-0.5">
+              <span className="text-white font-black text-[14px] font-mono leading-none drop-shadow-md px-1 truncate mt-0.5">
                 {(() => {
                   const price = (player?.isSold && player?.soldPrice) ? player.soldPrice : (player?.basePrice ?? 0);
                   if (price >= 100000) return `₹${(price / 100000).toFixed(1)}L`;
-                  if (price >= 1000) return `₹${(price / 1000).toFixed(0)}K`;
+                  if (price >= 1000) return `₹${(price / 1000).toFixed(1)}K`;
                   return `₹${price}`;
                 })()}
               </span>
-              {/* Position */}
-              <span className="text-orange-500 font-extrabold text-[10px] uppercase tracking-widest leading-none drop-shadow-md select-none">
-                {stats.positionName}
+              <span className="bg-black/60 border-t border-white/10 text-white/60 text-[7px] font-black uppercase tracking-wider py-1 mt-1 leading-none px-1">
+                {player?.isSold ? 'BOUGHT' : 'BASE'}
               </span>
             </div>
 
-            {/* Attack Score */}
-            <div className="w-[28%] flex flex-col bg-gradient-to-b from-[#ff2244] to-[#b31414] border border-white/20 rounded-[3px] text-center justify-center overflow-hidden shadow-inner">
-              <span className="text-white font-black text-[19px] font-mono leading-none drop-shadow-md">
-                {stats.attackRating}
+            {/* Category Panel */}
+            <div className="flex-1 flex flex-col justify-center items-center bg-zinc-950/90 border border-white/10 rounded-[3px] py-1.5 px-1">
+              <span className="text-[#c59b72] font-black text-[12px] uppercase tracking-widest leading-none drop-shadow-md select-none truncate w-full text-center">
+                {player.category || 'GENERAL'}
               </span>
-              <span className="bg-red-950/90 text-white text-[8px] font-black uppercase tracking-wider py-0.5 mt-0.5 leading-none">
-                ATTACK
+              <span className="text-white/40 text-[7px] font-black uppercase tracking-wider mt-1 leading-none">
+                CATEGORY
               </span>
+            </div>
+
+            {/* Logo Panel */}
+            <div className="w-[28%] flex flex-col bg-zinc-900 border border-white/20 rounded-[3px] items-center justify-center overflow-hidden shadow-inner p-0.5">
+              <img src="/gb.jpeg" alt="Golden Boys Logo" className="w-full h-full object-contain" />
             </div>
           </div>
 

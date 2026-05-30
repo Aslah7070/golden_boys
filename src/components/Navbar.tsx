@@ -40,8 +40,8 @@ export default function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 group-hover:border-amber-500/50 transition-colors">
-            <Trophy className="h-5 w-5" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-black border border-amber-500/20 group-hover:border-amber-500/50 transition-colors overflow-hidden p-0.5">
+            <img src="/gb.jpeg" alt="Golden Boys Logo" className="w-full h-full object-contain drop-shadow-md" />
           </div>
           <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
             GOLDEN BOYS
